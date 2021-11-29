@@ -1,0 +1,55 @@
+{
+Autor: Alvx9 
+}
+[ENABLE]
+
+alloc(newmem,2048)
+label(returnhere)
+label(originalcode)
+label(exit)
+
+newmem:
+// this is one example , change how you want
+cmp dword ptr [ecx+esi*8+BC],(int)18 // grade
+je dwIncrease
+cmp dword ptr [ecx+esi*8+BC],(int)1511 // grade
+je dwIncrease40
+cmp dword ptr [ecx+esi*8+BC],(int)36 // grade
+je dwIncrease20
+
+
+
+originalcode:
+movzx eax,word ptr [ecx+esi*8+000000BC]
+
+exit:
+jmp returnhere
+
+dwIncrease:
+// ecx+esi*8+C0 = percentage % drop item
+mov [ecx+esi*8+C0],(int)55 // original = 55
+jmp originalcode
+
+dwIncrease20:
+mov [ecx+esi*8+C0],(int)40 // original = 55
+jmp originalcode
+
+dwIncrease40:
+mov [ecx+esi*8+C0],(int)20 // original = 55
+jmp originalcode
+
+
+"ps_game.exe"+BABD3:
+jmp newmem
+nop
+nop
+nop
+returnhere:
+
+
+ 
+ 
+[DISABLE]
+dealloc(newmem)
+"ps_game.exe"+BABD3:
+movzx eax,word ptr [ecx+esi*8+000000BC]
