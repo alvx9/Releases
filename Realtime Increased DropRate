@@ -26,7 +26,7 @@ exit:
 jmp returnhere
 
 dwIncrease:
-// ecx+esi*8+C0 = percentage % drop item
+// ecx+esi*8+C0 = DropRate
 mov [ecx+esi*8+C0],(int)55 // original = 55
 jmp originalcode
 
