@@ -1,0 +1,60 @@
+// alvx9#870
+// autor: alvx9
+[ENABLE]
+alloc(newmem,2048)
+label(returnhere)
+label(originalcode)
+label(exit)
+
+newmem:
+push eax
+mov eax,[edx+30]
+cmp byte ptr [eax+24],(int)100 // TYPE
+je check_ids_type
+pop eax
+
+originalcode:
+mov edx,[edx+30]
+cmp dword ptr [edx+000000A0],1B
+
+exit:
+jmp returnhere
+
+eax_pop:
+pop eax
+jmp originalcode
+
+pop_and_jmp:
+pop eax
+jmp 00469934
+
+check_ids_type:
+// NT = non-tradable items
+cmp byte ptr [eax+25],(int)89 // NT ITEM
+je pop_and_jmp
+cmp byte ptr [eax+25],(int)90 // NT ITEM
+je pop_and_jmp
+cmp byte ptr [eax+25],(int)205 // NT ITEM
+je pop_and_jmp
+cmp byte ptr [eax+25],(int)209 // NT ITEM
+je pop_and_jmp
+cmp byte ptr [eax+25],(int)229 // NT ITEM
+je pop_and_jmp
+cmp byte ptr [eax+25],(int)224 // NT ITEM
+je pop_and_jmp
+
+jmp eax_pop
+
+"ps_game.exe"+6944E:
+jmp newmem
+nop 5
+returnhere:
+
+
+
+
+[DISABLE]
+dealloc(newmem)
+"ps_game.exe"+6944E:
+mov edx,[edx+30]
+cmp dword ptr [edx+000000A0],1B
