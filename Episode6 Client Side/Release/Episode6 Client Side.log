@@ -1,0 +1,11 @@
+﻿  DisguiseNameFix.cpp
+  dllmain.cpp
+  Hook.cpp
+LINK : warning C4727: PCH nomeado c:\users\marci\source\repos\episode6 client side\release\episode6 client side.pch com mesmo carimbo de data/hora encontrado em c:\users\marci\source\repos\episode6 client side\release\dllmain.obj e em c:\users\marci\source\repos\episode6 client side\release\disguisenamefix.obj. Usando primeiro PCH.
+LINK : warning C4727: PCH nomeado c:\users\marci\source\repos\episode6 client side\release\episode6 client side.pch com mesmo carimbo de data/hora encontrado em c:\users\marci\source\repos\episode6 client side\release\hook.obj e em c:\users\marci\source\repos\episode6 client side\release\disguisenamefix.obj. Usando primeiro PCH.
+  Gerando código
+  0 of 8 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    0 functions had inline decision re-evaluated but remain unchanged
+  Finalizada a geração de código
+  Episode6 Client Side.vcxproj -> C:\Users\marci\source\repos\Episode6 Client Side\Release\Episode6 Client Side.dll
