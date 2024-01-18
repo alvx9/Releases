@@ -1,7 +1,7 @@
 #include "pch.h"
 
 DWORD isStackAddress;
-uint8_t updateAppareancePacket[75];  // Variável global
+uint8_t updateAppareancePacket[75];  
 char characterName[22];
 
 void copyShapePacket(uint8_t* getShapePacketData) {
