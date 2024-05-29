@@ -21,7 +21,5 @@ _declspec(naked) void enable_local_ress_ultimate_mode() {
 
 
 void RessLeaderandLocal() {
-
-	BYTE Enable_Local_Ress[] = { 0x90, 0x90,  0x90,  0x90,  0x90,  0x90 };
 	Hook((PVOID)0x004D732B, enable_local_ress_ultimate_mode, 9);
 }
