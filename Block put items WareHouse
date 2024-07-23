@@ -10,7 +10,10 @@ newmem:
 push eax
 mov eax,[edx+30]
 cmp byte ptr [eax+24],(int)100 // TYPE
-je check_ids_type
+je check_ids_type_100
+cmp byte ptr [eax+24],(int)99 // example type
+je check_ids_type_99
+eax_pop:
 pop eax
 
 originalcode:
@@ -20,15 +23,31 @@ cmp dword ptr [edx+000000A0],1B
 exit:
 jmp returnhere
 
-eax_pop:
-pop eax
-jmp originalcode
+
 
 pop_and_jmp:
 pop eax
 jmp 00469934
 
-check_ids_type:
+check_ids_type_100:
+// NT = non-tradable items
+cmp byte ptr [eax+25],(int)89 // NT ITEM
+je pop_and_jmp
+cmp byte ptr [eax+25],(int)90 // NT ITEM
+je pop_and_jmp
+cmp byte ptr [eax+25],(int)205 // NT ITEM
+je pop_and_jmp
+cmp byte ptr [eax+25],(int)209 // NT ITEM
+je pop_and_jmp
+cmp byte ptr [eax+25],(int)229 // NT ITEM
+je pop_and_jmp
+cmp byte ptr [eax+25],(int)224 // NT ITEM
+je pop_and_jmp
+
+jmp eax_pop
+
+
+check_ids_type_99:
 // NT = non-tradable items
 cmp byte ptr [eax+25],(int)89 // NT ITEM
 je pop_and_jmp
