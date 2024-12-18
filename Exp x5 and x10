@@ -1,0 +1,42 @@
+[ENABLE]
+//code from here to '[DISABLE]' will be used to enable the cheat
+alloc(newmem,2048)
+label(returnhere)
+label(originalcode)
+label(exit)
+
+newmem: //this is allocated memory, you have read,write,execute access
+//place your code here
+cmp dword ptr [esi+0000596C],#500 // hbt type
+je setExp5
+cmp dword ptr [esi+00000596C],#1000 // hbt type
+je setExp10
+originalcode:
+cmp dword ptr [esi+0000596C],00
+
+exit:
+jmp returnhere
+
+setExp5:
+fstp st(0)
+fld qword ptr [005741A0] // double 5
+jmp 004650C3
+
+setExp10:
+fstp st(0)
+fld qword ptr [005740B8] // double 10
+jmp 004650C3
+"ps_game.exe"+650B2:
+jmp newmem
+nop 2
+returnhere:
+
+
+ 
+ 
+[DISABLE]
+//code from here till the end of the code will be used to disable the cheat
+dealloc(newmem)
+"ps_game.exe"+650B2:
+db 83 BE 6C 59 00 00 00
+//cmp dword ptr [esi+0000596C],00
