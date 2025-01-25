@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable CheatEngineTableVersion="45">
+  <CheatEntries>
+    <CheatEntry>
+      <ID>885</ID>
+      <Description>"Oblivion Island Notification"</Description>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>{
+Author: Alvx9
+Date: 25/01/2025
+}
+[ENABLE]
+//code from here to '[DISABLE]' will be used to enable the cheat
+alloc(newmem,2048)
+alloc(pNotice,100)
+alloc(IslandNoticeOpen,4)
+alloc(IslandNoticeClose,4)
+alloc(nBytes,4)
+alloc(dwTickTime,4)
+label(returnhere)
+label(originalcode)
+label(exit)
+
+newmem: //this is allocated memory, you have read,write,execute access
+//place your code here
+pushad
+call dword ptr [005540D0]
+mov edx,[dwTickTime]
+add edx,#60000 // 1 minute verify
+cmp eax,edx
+jna pop_and_close
+call dword ptr [005540D0]
+mov [dwTickTime],eax
+sub esp, #16
+lea eax, [esp]
+push eax
+call GetSystemTime // GetSystemTime
+// RETURN UTC Time
+movzx eax,word ptr [esp+04] // day of week
+movzx ebx,word ptr [esp+08] // hour
+// eax = day of week
+// 0 = Sunday
+// 1 = Monday
+// 2 = Tuesday
+// 3 = Wednesday
+// 4 = Thursday
+// 5 = Friday
+// 6 = Saturday
+cmp eax,0 // Saturday OI Verify
+je checkIslandSundayHourOpen
+cmp eax,1 // Saturday OI Verify
+je checkIslandMondayHourOpen
+cmp eax,2 // Saturday OI Verify
+je checkIslandTuesdayHourOpen
+cmp eax,3 // Saturday OI Verify
+je checkIslandWednesdayHourOpen
+cmp eax,4 // Saturday OI Verify
+je checkIslandThursdayHourOpen
+cmp eax,5 // Saturday OI Verify
+je checkIslandFridayHourOpen
+cmp eax,6 // Saturday OI Verify
+je checkIslandSaturdayHourOpen
+
+
+
+
+returnClose:
+add esp,#16
+pop_and_close:
+popad
+
+
+
+
+
+originalcode:
+mov ecx,[ps_game.exe+187968]
+
+exit:
+jmp returnhere
+
+checkIslandSundayHourOpen:
+cmp ebx,[timeSunday] // hour open portal
+je triggerNoticeOpen
+mov ecx,[timeSunday] // hour open portal
+add ecx,1 // hour duration
+cmp ebx,ecx
+jge triggerNoticeClose
+jmp returnClose
+
+checkIslandMondayHourOpen:
+cmp ebx,[timeMonday]// hour open portal
+je triggerNoticeOpen
+mov ecx,[timeMonday] // hour open portal
+add ecx,1 // hour duration
+cmp ebx,ecx
+jge triggerNoticeClose
+jmp returnClose
+
+checkIslandTuesdayHourOpen:
+cmp ebx,[timeTuesday] // hour open portal
+je triggerNoticeOpen
+mov ecx,[timeTuesday] // hour open portal
+add ecx,1 // hour duration
+cmp ebx,ecx
+jge triggerNoticeClose
+jmp returnClose
+
+checkIslandWednesdayHourOpen:
+cmp ebx,[timeWednesday] // hour open portal
+je triggerNoticeOpen
+mov ecx,[timeWednesday] // hour open portal
+add ecx,1 // hour duration
+cmp ebx,ecx
+jge triggerNoticeClose
+jmp returnClose
+
+checkIslandThursdayHourOpen:
+cmp ebx,[timeThursday]// hour open portal
+je triggerNoticeOpen
+mov ecx,[timeThursday] // hour open portal
+add ecx,1 // hour duration
+cmp ebx,ecx
+jge triggerNoticeClose
+jmp returnClose
+
+checkIslandFridayHourOpen:
+cmp ebx,[timeFriday] // hour open portal
+je triggerNoticeOpen
+mov ecx,[timeFriday] // hour open portal
+add ecx,1 // hour duration
+cmp ebx,ecx
+jge triggerNoticeClose
+jmp returnClose
+
+checkIslandSaturdayHourOpen:
+cmp ebx,[timeSaturday] // hour open portal
+je triggerNoticeOpen
+mov ecx,[timeSaturday] // hour open portal
+add ecx,1 // hour duration
+cmp ebx,ecx
+jge triggerNoticeClose
+
+
+
+jmp returnClose
+
+
+
+triggerNoticeOpen:
+mov ebx,1
+mov ebx,edi
+call sentNotice
+mov [IslandNoticeClose],00
+jmp returnClose
+
+triggerNoticeClose:
+mov ebx,2
+call sentNotice
+mov [IslandNoticeOpen],00
+jmp returnClose
+
+sentNotice:
+mov word ptr [pNotice],F90B
+call noticeLenght
+mov al,byte ptr [nBytes]
+add al,01
+mov byte ptr [pNotice+02],al
+
+cmp ebx,2
+jne isOpenNoticeChar
+mov edi,noticeCloseOI
+jmp continueNoticeIsland
+
+isOpenNoticeChar:
+mov edi,noticeOpenOI
+continueNoticeIsland:
+mov esi,pNotice+03
+xor ecx,ecx
+
+start_loop_menssage:
+mov al,[edi]
+mov [esi+ecx],al
+test al,al
+je pop_return
+inc edi
+inc ecx
+jmp start_loop_menssage
+
+pop_return:
+mov esi,[00587960]
+cmp ebx,2 //  checkCloseNoticeOpen
+jne checkOpenNotice
+cmp [IslandNoticeClose],01
+je returnFunc
+mov [IslandNoticeClose],01
+jmp continueNoticeSent
+checkOpenNotice:
+cmp [IslandNoticeOpen],01
+je returnFunc
+mov [IslandNoticeOpen],01
+continueNoticeSent:
+mov eax,[nBytes]
+add eax,03
+lea ecx,[pNotice]
+push eax
+call 00419120
+add esp,04
+returnFunc:
+ret
+
+noticeLenght:
+cmp ebx,2
+jne openLenghtNotice
+mov esi,noticeCloseOI
+jmp continueLenghtNotice
+openLenghtNotice:
+mov esi,noticeOpenOI
+continueLenghtNotice:
+xor ecx,ecx
+count_bytes_loop:
+cmp byte [esi], 0
+je end_count_bytes
+
+inc ecx
+inc esi
+jmp count_bytes_loop
+
+end_count_bytes:
+mov [nBytes],ecx
+ret
+
+noticeOpenOI:
+db 'The portal to the Island of Oblivion is Open' 0
+
+noticeCloseOI:
+db 'The portal to the Island of Oblivion is Closed' 0
+
+
+timeSunday:
+dd #15 0 // not modify the 0 , just the # integer number
+timeMonday:
+dd #15 0 // not modify the 0 , just the # integer number
+timeTuesday:
+dd #15 0 // not modify the 0 , just the # integer number
+timeWednesday:
+dd #15 0 // not modify the 0 , just the # integer number
+timeThursday:
+dd #15 0 // not modify the 0 , just the # integer number
+timeFriday:
+dd #15 0 // not modify the 0 , just the # integer number
+timeSaturday:
+dd #17 0 // not modify the 0 , just the # integer number
+
+"ps_game.exe"+35AD:
+jmp newmem
+nop
+returnhere:
+
+
+ 
+ 
+[DISABLE]
+//code from here till the end of the code will be used to disable the cheat
+dealloc(newmem)
+"ps_game.exe"+35AD:
+db 8B 0D 68 79 58 00
+//mov ecx,[ps_game.exe+187968]
+</AssemblerScript>
+    </CheatEntry>
+  </CheatEntries>
+  <UserdefinedSymbols/>
+</CheatTable>
