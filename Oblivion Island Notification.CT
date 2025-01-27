@@ -34,7 +34,7 @@ mov [dwTickTime],eax
 sub esp, #16
 lea eax, [esp]
 push eax
-call GetSystemTime // GetSystemTime
+call dword ptr [00554108] // getLocalTime
 // RETURN UTC Time
 movzx eax,word ptr [esp+04] // day of week
 movzx ebx,word ptr [esp+08] // hour
